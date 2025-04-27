@@ -3,6 +3,6 @@
 ### Linear mixed effects models
 References:
 
-https://cambiotraining.github.io/stats-mixed-effects-models/
+1. https://cambiotraining.github.io/stats-mixed-effects-models/
 
-Lecture slides from SS 9155
+2. Lecture slides from SS 9155
