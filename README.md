@@ -22,5 +22,16 @@ References:
 5. https://rpubs.com/enwuliu/1004385 -- for mannually fitting a natural cubic spline to an example dataset, and comparing ns() and rcs() for fitting a natural spline
 
 
-Redistribution or mirroring of this repository or its contents on other websites is strictly prohibited.  
-Please use this GitHub repository directly to view or use the code.
+### License and Usage Terms
+
+This repository and its contents are © 2025 [Your Name or GitHub Username]. All rights reserved.
+
+You are welcome to:
+	•	View and use the code and materials directly via this GitHub repository
+	•	Use the code for educational or non-commercial personal projects, as long as you do so through GitHub
+
+However, you may not:
+	•	Rehost, mirror, or redistribute this repository or any part of its content on third-party websites or platforms
+	•	Use any automated means (e.g., scraping tools or bots) to copy or mirror the repository or its contents elsewhere
+
+Unauthorized redistribution or rehosting is strictly prohibited. Please contact me for permission if needed.
