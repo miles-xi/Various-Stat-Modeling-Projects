@@ -15,16 +15,16 @@ References:
 
 2. Elements of Statistical Learning (ESL)
 
-3. [Theories](stats.stackexchange.com/questions/172217/) -- for deriving the representation of a natural cubic spline from a truncated power basis series spline mentioned in ESL
+3. [Theories](stats.stackexchange.com/questions/172217/), for deriving the representation of a natural cubic spline from a truncated power basis series spline mentioned in ESL
 
-4. [Example 1](bookdown.org/ssjackson300/Machine-Learning-Lecture-Notes/splines.html#prac-reg-splines) -- for fitting a regression spline to an example dataset
+4. [Example 1](bookdown.org/ssjackson300/Machine-Learning-Lecture-Notes/splines.html#prac-reg-splines), for fitting a regression spline to an example dataset
 
-5. [Example 2](https://rpubs.com/enwuliu/1004385) -- for mannually fitting a natural cubic spline to an example dataset, and comparing ns() and rcs() for fitting a natural spline
+5. [Example 2](https://rpubs.com/enwuliu/1004385), for mannually fitting a natural cubic spline to an example dataset, and comparing ns() and rcs() for fitting a natural spline
 
 ### Longtidunal Data Analysis
 References:
 
-1. [Longitudinal Data Analysis - University of washington](https://faculty.washington.edu/heagerty/Courses/VA-longitudinal/private/LDAchapter.pdf)
+1. [Longitudinal Data Analysis - University of Washington](https://faculty.washington.edu/heagerty/Courses/VA-longitudinal/private/LDAchapter.pdf)
 
 2. TBC
 
