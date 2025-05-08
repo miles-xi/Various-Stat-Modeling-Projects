@@ -26,7 +26,9 @@ References:
 
 1. [Longitudinal Data Analysis - University of Washington](https://faculty.washington.edu/heagerty/Courses/VA-longitudinal/private/LDAchapter.pdf)
 
-2. TBC
+2. Core Guide: Longitudinal Data Analysis
+
+3. Introduction to Econometrics by James H. Stock and Mark Watson
 
 ### License and Usage Terms
 This repository and its contents are © 2025 Miles Xi. All rights reserved.
