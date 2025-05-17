@@ -28,7 +28,7 @@ References:
 
 2. [Core Guide: Longitudinal Data Analysis](https://sites.globalhealth.duke.edu/rdac/wp-content/uploads/sites/27/2020/08/Core-Guide_Longitudinal-Data-Analysis_10-05-17.pdf)
 
-3. [Introduction to Econometrics, Global edition - James H. Stock and Mark Watson](https://www.sea-stat.com/wp-content/uploads/2020/08/James-H.-Stock-Mark-W.-Watson-Introduction-to-Econometrics-Global-Edition-Pearson-Education-Limited-2020.pdf)
+3. [Introduction to Econometrics, Global edition, 4th edition - James H. Stock and Mark Watson](https://www.sea-stat.com/wp-content/uploads/2020/08/James-H.-Stock-Mark-W.-Watson-Introduction-to-Econometrics-Global-Edition-Pearson-Education-Limited-2020.pdf)
 
 ### License and Usage Terms
 This repository and its contents are © 2025 Miles Xi. All rights reserved.
