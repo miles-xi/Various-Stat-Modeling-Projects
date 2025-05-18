@@ -1,0 +1,130 @@
+# Consider a panel data set and specify the model as Y_it = alpha_i + beta * X_it + epsilon_it
+# where alpha_i is the entity fixed effects. 
+# According to the Stock and Watson's textbook Introduction to Econometrics 
+# we can use the entity-demeaned OLS algorithm to estimate beta
+
+# this estimator is identical to the OLS estimator obtained by estimating the beta in a model 
+# where the entity fixed effects are represented by binary variables
+# That is, entity-demeaned OLS ("within estimator") == Least Square Dummy Variable, LSDV
+
+# to show this
+#### 1. simulate panel data ####
+rm(list = ls())
+set.seed(19890604)
+n = 3  # #entities
+t = 4  
+
+id = rep(1:n, each=t)  # subject/entity id
+time = rep(1:t, times=n)
+alpha = c(2, 4, 6)  #entity-specific intercepts
+X = rnorm(n * t)
+beta = 3
+epsilon = rnorm(n * t, sd=0.5)
+
+# true model is Y_it = alpha_i + 3 * X_it + epsilon_it
+Y = alpha[id] + beta * X + epsilon
+
+alpha[id]
+# [1] 2 2 2 2 4 4 4 4 6 6 6 6
+
+panel= data.frame(id=factor(id), time, X, Y)
+panel
+#     id time      X          Y
+# 1   1    1  0.8168779  4.2822253
+# 2   1    2 -2.1886034 -4.9207733
+# 3   1    3  0.5886242  3.6741382
+# 4   1    4  0.1706281  2.2930775
+# 5   2    1 -0.5932575  1.6286100
+# 6   2    2  1.3425866  8.4303156
+# 7   2    3 -1.1565808  0.9114760
+# 8   2    4  1.1210270  7.3482585
+# 9   3    1 -0.8341405  2.7914432
+# 10  3    2 -1.9816670 -1.0346261
+# 11  3    3 -2.1470659 -0.5151729
+# 12  3    4 -0.9249107  3.1839938
+
+
+#### 2. estimation ####
+# LSDV
+lm_lsdv = lm(Y ~ X + id, data = panel)
+summary(lm_lsdv)
+#             Estimate  Std. Error t value Pr(>|t|)    
+# (Intercept)   1.8039     0.2092   8.624 2.53e-05 ***
+# X             3.0811     0.1214  25.379 6.23e-09 ***
+# id2           2.2259     0.2974   7.485 7.03e-05 ***
+# id3           3.8376     0.3354  11.443 3.08e-06 ***
+
+# entity-demeaned OLS
+X_i_bar = tapply(panel$X, panel$id, mean)
+Y_i_bar = tapply(panel$Y, panel$id, mean)
+
+X_demeaned = panel$X - X_i_bar[as.character(panel$id)]
+Y_demeaned = panel$Y - Y_i_bar[as.character(panel$id)]
+
+lm_within = lm(Y_demeaned ~ X_demeaned - 1)  #no intercept term
+summary(lm_within)
+#             Estimate Std. Error t value Pr(>|t|)    
+# X_demeaned   3.0811     0.1035   29.76 7.28e-12 ***
+
+# coefficient estimates: beta_hat_within = beta_hat_lsdv = 3.0811 ~ 3 (true value)
+
+
+#### 3. using plm package ####
+library(plm)  # Panel Linear Models
+panel2 = pdata.frame(panel, index=c('id', 'time'))  # prepare panel data
+panel2
+
+plm_fe = plm(Y ~ X, data=panel2, model='within')  # uses entity-demeaned OLS (within estimator)
+summary(plm_fe)
+# Oneway (individual) effect Within Model
+# 
+# Coefficients:
+#   Estimate Std. Error t-value  Pr(>|t|)    
+# X   3.0810     0.1214  25.379 6.225e-09 ***
+
+# 3.0810 is close to 3.0811
+
+
+# for comparison, use "random"
+plm_re = plm(Y ~ X, data=panel2, model='random')
+summary(plm_re)
+# Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)
+# Effects:
+#                  var std.dev share
+# idiosyncratic 0.1737  0.4167 0.043
+# individual    3.8288  1.9567 0.957
+# theta: 0.8941
+# 
+# Coefficients:
+#             Estimate Std. Error z-value  Pr(>|z|)    
+# (Intercept)  3.82087    1.13262  3.3735 0.0007422 ***
+# X            3.07224    0.12052 25.4910 < 2.2e-16 ***
+
+
+# use lmer()
+library(lme4)
+lme = lmer(Y ~ X + (1 | id), data=panel)
+summary(lme)
+# Linear mixed model fit by REML ['lmerMod']
+# Random effects:
+#   Groups   Name        Variance Std.Dev.
+# id       (Intercept) 3.6597   1.9130  
+# Residual             0.1736   0.4167  
+# Number of obs: 12, groups:  id, 3
+# 
+# Fixed effects:
+#   Estimate Std. Error t value
+# (Intercept)    3.821      1.113   3.434
+# X              3.072      0.121  25.380
+
+
+# summary:
+# fixed effect: LSDV = entity-demeaned OLS (within estimator) = plm(Y ~ X, data=panel2, model='within')
+# random: lmer(Y ~ X + (1 | id), data=panel) ~ plm(Y ~ X, data=panel2, model='random')
+
+
+
+
+
+
+
