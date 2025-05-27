@@ -45,7 +45,7 @@ panel
 
 
 #### 2. estimation ####
-# LSDV
+##### LSDV #####
 lm_lsdv = lm(Y ~ X + id, data = panel)
 summary(lm_lsdv)
 #             Estimate  Std. Error t value Pr(>|t|)    
@@ -54,7 +54,9 @@ summary(lm_lsdv)
 # id2           2.2259     0.2974   7.485 7.03e-05 ***
 # id3           3.8376     0.3354  11.443 3.08e-06 ***
 
-# entity-demeaned OLS
+# df = n*t - (n+1) = 3*4 - (3+1) = 8
+
+##### entity-demeaned OLS #####
 X_i_bar = tapply(panel$X, panel$id, mean)
 Y_i_bar = tapply(panel$Y, panel$id, mean)
 
@@ -66,8 +68,9 @@ summary(lm_within)
 #             Estimate Std. Error t value Pr(>|t|)    
 # X_demeaned   3.0811     0.1035   29.76 7.28e-12 ***
 
-# coefficient estimates: beta_hat_within = beta_hat_lsdv = 3.0811 ~ 3 (true value)
+# df = 12 - 1 = 11
 
+# coefficient estimates: beta_hat_within = beta_hat_lsdv = 3.0811 ~ 3 (true value)
 
 #### 3. using plm package ####
 library(plm)  # Panel Linear Models
@@ -82,7 +85,10 @@ summary(plm_fe)
 #   Estimate Std. Error t-value  Pr(>|t|)    
 # X   3.0810     0.1214  25.379 6.225e-09 ***
 
-# 3.0810 is close to 3.0811
+# beta estimate: 3.0810 ~= 3.0811
+# SE: se_plm = se_lsdv != se_entitydemeanedOLS
+# Reason: plm(model='within') uses within trasformation (entity-demeaning) 
+# but adjusts degrees of freedom so its SE matches LSDV
 
 
 # for comparison, use "random"
