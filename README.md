@@ -30,6 +30,17 @@ References:
 
 3. [Introduction to Econometrics, Global edition, 4th edition - James H. Stock and Mark Watson](https://www.sea-stat.com/wp-content/uploads/2020/08/James-H.-Stock-Mark-W.-Watson-Introduction-to-Econometrics-Global-Edition-Pearson-Education-Limited-2020.pdf)
 
+### ARIMAX vs. Regression with ARIMA error
+#### Regression with ARIMA error
+1. Lecture notes from Time Series class - Topic 9: ARMA(p,q) - How are the following three definitions related?
+
+2. [The ARIMAX model muddle](https://robjhyndman.com/hyndsight/arimax/)
+
+3. R documentations, [arima {stats}](https://search.r-project.org/R/refmans/stats/html/arima.html), [forecast::ARima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/Arima), [forecast:auto.arima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/auto.arima), and [TSA::arimax()](https://www.rdocumentation.org/packages/TSA/versions/1.3/topics/arimax)
+
+#### ARIMAX
+
+
 ### License and Usage Terms
 This repository and its contents are © 2025 Miles Xi. All rights reserved.
 
