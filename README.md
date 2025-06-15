@@ -35,8 +35,12 @@ References:
 1. Lecture notes from Time Series class - Topic 9: ARMA(p,q) - How are the following three definitions related?
 
 2. [The ARIMAX model muddle](https://robjhyndman.com/hyndsight/arimax/)
+   
+3. [Regression with ARIMA errors in R](https://otexts.com/fpp2/regarima.html)
 
-3. R documentations, [stats::arima](https://search.r-project.org/R/refmans/stats/html/arima.html), [forecast::ARima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/Arima), [forecast:auto.arima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/auto.arima), and [TSA::arimax()](https://www.rdocumentation.org/packages/TSA/versions/1.3/topics/arimax)
+4. R documentations, [stats::arima](https://search.r-project.org/R/refmans/stats/html/arima.html), [forecast::ARima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/Arima), [forecast:auto.arima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/auto.arima), and [TSA::arimax()](https://www.rdocumentation.org/packages/TSA/versions/1.3/topics/arimax)
+
+
 
 #### ARIMAX
 
