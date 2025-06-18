@@ -1,0 +1,78 @@
+---
+title: "060_mixed_effect_4 - Crossed random effects"
+author: "Miles"
+date: "2025-06-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+cognitive = read.csv('~/Documents/MDA_GLM/GLM_content/stroop.csv')
+library(lme4)
+```
+
+## 9.1 (Fully) Crossed random effect
+Two clustering variables are "crossed" if they can be combined in different ways to generate unique grouping, but one of them doesn't nest inside the other. This concept is similar to the idea of "factorial design" in regular linear modeling.
+
+```{r data}
+head(cognitive)
+tail(cognitive)
+head(table(cognitive$item, cognitive$subject), 10)
+```
+Response variable is reaction_time. The fixed predictor is congruency. Clustering variables are subject (i= A, B, ..., L) and task item (j=1, 2,..., 36). Item is not nested within subject. 
+
+The model
+$$
+time_{ij} = (\beta_0 + b_{0i} + b_{0ij}) + (\beta_1 + b_{1i}) \cdot congruency_{ij} + \epsilon_{ij}
+$$
+where i indicates subject, j item. Because congruency does not vary within individual items, there is no $b_{1ij}$ before $congruency_{ij}$.   
+
+```{r model}
+lme_cog = lmer(reaction_time ~ congruency + (1|item) + (1+congruency|subject), data=cognitive)
+summary(lme_cog)
+```
+Output shows we have fitted 36 random intercepts for item, and 12 for subject.
+
+## 9.3 Partially crossed random effect
+In the example above, each participant experienced each of the task items. We call this a fully-crossed design (or perhaps, a full factorial design). 
+If each participant had only responded to a randomized subset of the task items, then we would instead say that the item and subject random effects are *partially* crossed.
+
+```{r load new data}
+abrasion = read.csv('~/Documents/MDA_GLM/GLM_content/abrasion.csv')
+head(abrasion, 8)
+```
+Response variable is wear. The fixed predictor is material (k=A,B,C,D). Clustering variables are run (i= 1, 2, 3, 4) and position (j=1, 2, 3, 4). It's believed that there are differences between runs and across positions. 
+
+It might sound as if position and run are *completely* crossed (run 1 has 4 positions, and so does run 2), but actually they represent a Latin square design:
+
+image (https://cambiotraining.github.io/stats-mixed-effects-models/materials/09-crossed-random-effects.html#the-abrasion-dataset)
+
+Which is a particular type of randomized design where each experimental condition (materials A through D) appear once and only once in the element of design matrix. Material does not experience each position in each run (but a subset of position-run combination), hence a *partially* crossed design.
+
+The model 
+$$
+wear_{ijk} = (\beta_0 + b_{0i} + b_{0ij}) + \beta_1 \cdot material_{ijk} + \epsilon_{ijk}
+$$
+Because material being tested does not vary within positions, runs, or run-position combinations, there is no random slopes $b_{1j}$, $b_{1i}$, or $b_{1ij}$ before $material_{ijk}$.
+
+```{r model}
+lme_abrasion = lmer(wear ~ material + (1|run) + (1|position), data=abrasion)
+summary(lme_abrasion)
+```
+Check output "groups:  run, 4; position, 4", which means we do indeed have 4 groups each for run and position, which is correct.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

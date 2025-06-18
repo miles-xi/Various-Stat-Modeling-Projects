@@ -1,0 +1,146 @@
+---
+title: "Nested random effects"
+author: "Miles"
+date: "2025-06-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(lme4)
+```
+
+https://cambiotraining.github.io/stats-mixed-effects-models/materials/08-nested-random-effects.html
+
+## 8  Nested random effects
+Each doctor appears under only one hospital, so it's nested
+```{r load health data}
+health = read.csv('~/Documents/MDA_GLM/GLM_content/health.csv')
+head(health)
+head(table(health$doctor, health$hospital), 10)
+```
+## 8.2.1 Random intercept
+$$
+outcome_{ijk} = (\beta_0 + b_{0i} + b_{0ij}) + \beta_1 \cdot treat_{ijk} + \epsilon_{ijk} 
+$$
+where i indicates hosp, j indicates doc, and k patient.
+
+```{r random intercept}
+# lme_intercepts = lmer(outcome ~ treatment + (1|hospital) + (1|hospital:doctor), data=health)  # correct
+lme_intercepts = lmer(outcome ~ treatment + (1|hospital) + (1|doctor), data=health)
+summary(lme_intercepts)
+```
+Correct syntax should be the first one, (1|hospital:doctor),  but the webpage uses the second one, (1|doctor), which is also valid if the data structure clearly shows that doctors are uniquely associated with one hospital (i.e., no doctor appears in multiple hospitals).
+
+## 8.2.2 Random slope
+What level to fit random slopes at depends on the what level the treatment/predictor varies at.
+
+### Predictor/treatment varies at level 1 (between patients, within doctors)
+The model is 
+$$
+outcome_{ijk} = (\beta_0 + b_{0i} + b_{0ij}) + (\beta_1 + b_{1i}  + b_{1ij}) \cdot treat_{ijk} + \epsilon_{ijk} 
+$$
+```{r random slope}
+lme_slopes = lmer(outcome ~ treatment + (1+ treatment | hospital) + (1+treatment | hospital: doctor), data=health)
+# (1+treatment | hospital: doctor) == (1+treatment | doctor) 
+# both give the same result
+summary(lme_slopes)
+```
+
+### Predictor/treatment varies at level 2 (between doctors, within hospitals)
+```{r load health2 data}
+health2 = read.csv('~/Documents/MDA_GLM/GLM_content/health2.csv')
+head(health2, 10)
+head(table(health2$doctor, health2$hospital), 10)
+```
+
+Now imagine scenario where each doctor is a specialist in a certain type of treatment (surgery or drug), but cannot deliver both. So treatment does not vary within doctor but only varies within hospital. The model now should be  
+$$
+outcome_{ijk} = (\beta_0 + b_{0i} + b_{0ij}) + (\beta_1 + b_{1i}) \cdot treat_{ijk} + \epsilon_{ijk} 
+$$
+$b_{1ij}$ measures the effect of treatment on outcome attributed to doctor $j$. There is no $b_{1ij}$ before $treat_{ijk}$ b/c each doctor only uses one treatment.
+ 
+```{r new model}
+lme_slopes = lmer(outcome ~ treatment + (1+ treatment | hospital) + (1 | hospital: doctor), data=health)
+```
+
+### Predictor/treatment varies at level 3 (between hospitals)
+Now imagine scenario where each hospital can offer only one treatment. So treatment does not vary within the hospital but between hospitals. In this case there is no $b_{1i}$ before $treat_{ijk}$, b/c $b_{1i}$ measures the effect of treatment on outcome arising from hospital $i$.
+
+$$
+outcome_{ijk} = (\beta_0 + b_{0i} + b_{0ij}) + \beta_1 \cdot treat_{ijk} + \epsilon_{ijk} 
+$$
+This goes back to random intercepts only model.
+
+## 8.3 Implicit vs. explicit nesting
+
+```{r Paste data}
+data('Pastes')
+head(Pastes)
+```
+Response variable is strength. There's no fixed effects. Clustering variables are batch/delivery (i= A, B, ..., J), and cask (j=1,2,...,30). Cask is *nested* with batch. From each sample collected per cask, there are 2 assays (k=1,2)
+
+Model the strength, adjusting for variation across batches and casks.
+$$
+strength_{ijk} = \beta_0 + b_{0i} + b_{0ij} + \epsilon_{ijk}
+$$
+This is a nested design and we actually have 30 unique casks (3 per batch). (Coding doesn't determine the design, experimental reality does.) 
+
+Therefore, use `(1|batch:cask)` instead of `(1|bcask)`. Can also use A/B syntax `(1|batch/cask) == (1|batch) + (1|batch:cask)`
+```{r fit}
+lme_paste_wrong = lmer(strength ~ 1 + (1|batch) + (1|cask), data=Pastes) # wrong
+summary(lme_paste_wrong)
+
+lme_paste_explicit = lmer(strength ~ 1 + (1|batch) + (1|batch:cask), data=Pastes)  # correct, explicit nesting
+summary(lme_paste_explicit)
+```
+Number of obs: 60, groups:  batch, 10; cask, 3
+Number of obs: 60, groups:  batch:cask, 30; batch, 10
+
+The latter correctly identifies the number of casks. Always check # groups per clustering variables in the output.
+
+
+## Exercise: cake dataset
+```{r data}
+data("cake")
+head(cake,10)
+table(cake$replicate, cake$recipe)
+```
+Response is angle. Fixed effects of interest are recipe (i=1,2,3) and temperature (k=1,2,...,6). Clustering variable is replicate (given i, j=1,2,..,15 OR j=1,2,...,45). Which is completely nested within the recipe, despite the table. 
+
+$$
+angle_{ijk} = (\beta_0 + b_{0ij}) + \beta_1 \cdot recipe_{i} + \beta_2 \cdot temp_{ijk} + \beta_3 \cdot recipe_{i} \cdot temp_{ijk} + \epsilon_{ijk}
+$$
+
+```{r model 1: random intercept only}
+lme_cake1 = lmer(angle ~ recipe * temperature + (1|recipe:replicate), data=cake)
+summary(lme_cake1)
+```
+
+$$
+angle_{ijk} = (\beta_0 + b_{0ij}) + \beta_1 \cdot recipe_{i} + (\beta_2 + b_{1ij}) \cdot temp_{ijk} + \beta_3 \cdot recipe_{i} \cdot temp_{ijk} + \epsilon_{ijk}
+$$
+```{r model 2: try adding random slope; temperature as a factor}
+lmer(angle ~ recipe * temperature + (1 + temperature|recipe:replicate), data=cake)
+```
+Error is "number of random effects (=270) for term (1 + temperature | recipe:replicate)" 
+Here temperature is a factor with 6 levels so it is 5 dummies. The model actually is `(1 + temperature175 + ... + temperature215 | recipe:replicate)`, which is 6 random effects * 45 batches (j=1,2,...,45) = 270
+
+The solution is use numeric temperature:
+```{r model 3: add random slope by using numeric temp}
+lme_cake3 = lmer(angle ~ recipe * temp + (1 + temp|recipe:replicate), data=cake)
+summary(lme_cake3)
+```
+
+Q: Why might we prefer to use the numerical/continuous version?
+A: 
+1. Few params. using temperature as a factor creates 5 dummy variables and thus 5 slopes, but when using as a continuous variable there's only 1 slope. It also enables random slopes (see model 2 and 3), 
+
+2. Better for interpretation and interpolation/prediction.
+
+3. If the realtionship between temperature and outcome is nonlinear or irregualr across the levels, don't use the numeric version.
+
+
+
+
+
