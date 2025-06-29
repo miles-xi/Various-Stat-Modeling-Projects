@@ -41,9 +41,10 @@ References:
 4. R documentations, [stats::arima](https://search.r-project.org/R/refmans/stats/html/arima.html), [forecast::ARima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/Arima), [forecast:auto.arima](https://www.rdocumentation.org/packages/forecast/versions/8.24.0/topics/auto.arima), and [TSA::arimax()](https://www.rdocumentation.org/packages/TSA/versions/1.3/topics/arimax)
 
 
+### Time series of count data
+1. [Count Time Series: A Methodological Review](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1904957
 
-#### ARIMAX
-
+2. [tscount: An R Package for Analysis of Count Time Series Following Generalized Linear Models](https://cran.r-project.org/web/packages/tscount/vignettes/tsglm.pdf)
 
 ### License and Usage Terms
 This repository and its contents are © 2025 Miles Xi. All rights reserved.
