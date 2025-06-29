@@ -42,7 +42,7 @@ References:
 
 
 ### Time series of count data
-1. [Count Time Series: A Methodological Review](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1904957
+1. [Count Time Series: A Methodological Review](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1904957)
 
 2. [tscount: An R Package for Analysis of Count Time Series Following Generalized Linear Models](https://cran.r-project.org/web/packages/tscount/vignettes/tsglm.pdf)
 
