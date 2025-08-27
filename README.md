@@ -46,6 +46,12 @@ References:
 
 2. [tscount: An R Package for Analysis of Count Time Series Following Generalized Linear Models](https://cran.r-project.org/web/packages/tscount/vignettes/tsglm.pdf)
 
+### Poisson hurdle model
+1. [Getting Started with Hurdle Models](https://library.virginia.edu/data/articles/getting-started-with-hurdle-models)
+2. [Hurdle Model](https://m-clark.github.io/models-by-example/hurdle.html)
+
+
+
 ### License and Usage Terms
 This repository and its contents are © 2025 Miles Xi. All rights reserved.
 
